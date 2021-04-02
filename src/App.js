@@ -1,8 +1,7 @@
 
 import React from "react";
-import Header from "./components/Header.js"
-import MenuSection from "./components/MenuSection.js"
-import FoodItem from "./components/FoodItem.js"
+import Header from "./components/Header"
+import MenuSection from "./components/MenuSection"
 import './App.css';
 import axios from "axios"
 
@@ -51,6 +50,7 @@ class App extends React.Component {
         let menuCopy = [...this.state.menuSections]
         for (let i = 0; i < menuCopy.length; i++) {
           for (let j = 0; j < response.data.length; j++) {
+            response.data[j].price = this.itemPrice()
             if (menuCopy[i].type == response.data[j].meal_type.type) {
               if (menuCopy[i].menuItems) {
                 menuCopy[i].menuItems.push(response.data[j])
@@ -61,9 +61,8 @@ class App extends React.Component {
           }
         }
         this.setState({ menuSections: menuCopy })
+        
       })
-
-
       .catch(function (error) {
         // handle error
         console.log(error);
@@ -76,6 +75,9 @@ class App extends React.Component {
     //this.insertfunction();
   }
 
+  itemPrice = () => {
+    return Math.floor(Math.random() * 30) + 10
+  }
 
   //________________________________________________
 
@@ -86,8 +88,8 @@ class App extends React.Component {
           <div className="card-body">
             <Header />
           </div>
-          <div className="card-body col-6">
-            {this.state.menuSections.map(section => <MenuSection key={section.id} section={section} />)}
+          <div className="card-body col-6 accordion accordion-flush" id={"accordionFlushExample"}>
+            {this.state.menuSections.map((section, index) => <MenuSection key={section.id} section={section} index={index}/>)}
           </div>
         </div>
       </div>
